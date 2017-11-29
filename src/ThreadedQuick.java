@@ -8,7 +8,8 @@ public class ThreadedQuick {
     private static final int MINIMUM_THREAD_WORKLOAD = Integer.MAX_VALUE;
 
     public static void sort(int[] array) {
-        sort(array, 0, array.length);
+        int[] temp = array.clone();
+        sort(temp, 0, temp.length);
     }
 
     public static void sort(int[] array, int fromIndex, int toIndex) {
