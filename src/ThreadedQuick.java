@@ -12,11 +12,15 @@ public class ThreadedQuick {
     }
 
     public static void sort(int[] array, int fromIndex, int toIndex) {
+        int processes = Driver.PROCESSES;
         int rangeLength = toIndex - fromIndex;
-        sortImpl(array,fromIndex,toIndex);
+        sortImpl(array,fromIndex,toIndex, processes);
     }
 
-    private static void sortImpl(int[] array,int fromIndex,int toIndex) {
+    private static void sortImpl(int[] array,int fromIndex,int toIndex, int processes) {
+        if (cores <= 1) {
+            sort(array, fromIndex, toIndex);
+        }
         int rangeLength = toIndex - fromIndex;
         int distance = rangeLength / 4;
 
@@ -44,8 +48,8 @@ public class ThreadedQuick {
             }
         }
 
-        TaskQuick leftThread = new TaskQuick(array,fromIndex,fromIndex + leftPL);
-        TaskQuick rightThread = new TaskQuick(array,toIndex - rightPL,toIndex);
+        TaskQuick leftThread = new TaskQuick(array,fromIndex,fromIndex + leftPL, processes/2);
+        TaskQuick rightThread = new TaskQuick(array,toIndex - rightPL,toIndex, processes - processes/2);
 
         leftThread.start();
         rightThread.start();
@@ -86,16 +90,18 @@ public class ThreadedQuick {
         private final int[] array;
         private final int fromIndex;
         private final int toIndex;
+        private final int processes;
 
-        TaskQuick(int[] array,int fromIndex,int toIndex) {
+        TaskQuick(int[] array,int fromIndex,int toIndex, int processes) {
             this.array = array;
             this.fromIndex = fromIndex;
             this.toIndex = toIndex;
+            this.processes = processes;
         }
 
         @Override
         public void run() {
-            sortImpl(array, fromIndex, toIndex);
+            sortImpl(array, fromIndex, toIndex, processes);
         }
     }
 }
