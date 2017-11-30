@@ -66,7 +66,7 @@ public class Driver {
             printStat(start, end);
             
             start = System.nanoTime();
-            ThreadedQuick.sort(array);
+            ThreadedQuick.parallelQuickSort(array);
             end = System.nanoTime();
             printStat(start, end);
             
